@@ -1,0 +1,15 @@
+.env
+google-api-credentials.json
+node_modules/
+*.sqlite 
+env.js
+.vscode
+guessinGameList0.json
+guessinGameList1.json
+guessinGameList2.json
+guessinGameList3.json
+guessinGameList4.json
+guessinGameList5.json
+guessinGameList6.json
+guessinGameList7.json
+guessinGameList8.json
