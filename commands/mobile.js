@@ -23,14 +23,15 @@ async function execute(message, args, user) {
         current_game: "",
         mobile: true,
       };
+
+      await leaderboard.set(
+        "playerList",
+        (await leaderboard.get("playerList")).concat([message.author.id])
+      );
     } else {
       profile.mobile = !profile.mobile;
     }
     await leaderboard.set(message.author.id, profile);
-    await leaderboard.set(
-      "playerList",
-      (await leaderboard.get("playerList")).concat([message.author.id])
-    );
 
     message.channel.send(
       `Mobile Viewing Mode has been toggled ${
