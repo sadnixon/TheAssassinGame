@@ -41,15 +41,16 @@ async function execute(message, args, user) {
       }
     }
 
-    console.log(lb_category);
-    console.log(lb_length);
-    console.log(game_category);
+    //console.log(lb_category);
+    //console.log(lb_length);
+    //console.log(game_category);
 
+    const playerIds = await leaderboard.get("playerList");
     const allPlayers = [];
-    for await (const [key] of leaderboard.iterator()) {
+    for (key of playerIds) {
       allPlayers.push(await leaderboard.get(key));
     }
-    console.log(allPlayers);
+    //console.log(allPlayers);
 
     //return;
 

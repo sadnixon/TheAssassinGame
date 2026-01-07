@@ -5,7 +5,6 @@ const {
   lMap,
   lbUpdater,
 } = require("../message-helpers");
-//const leaderboard = require("./leaderboard");
 
 async function execute(message, args, user) {
   let profile = await leaderboard.get(message.author.id);

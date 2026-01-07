@@ -111,6 +111,10 @@ client.on("message", async (message) => {
     await all_guesses.set("thisMonth", []);
   }
 
+  if (!(await leaderboard.get("playerList"))) {
+    await leaderboard.set("playerList", []);
+  }
+
   const isAuthorized =
     (await authorized_data_setters.get("auth")).indexOf(message.author.id) >=
       0 || message.author.id === OWNER;

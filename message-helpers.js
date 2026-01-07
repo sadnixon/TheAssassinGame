@@ -315,7 +315,7 @@ async function lbUpdater(spec_game, id, shot) {
     }
   }
 
-  console.log(profile);
+  //console.log(profile);
 
   await leaderboard.set(id, profile);
 

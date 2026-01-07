@@ -19,7 +19,6 @@ async function execute(message, args, user) {
       "All game information has been cleared."
     );
   }
-  console.log(team_roles_channels);
 }
 
 module.exports = {

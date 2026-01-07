@@ -9,7 +9,6 @@ const {
   lbUpdater,
   argsParser,
 } = require("../message-helpers");
-//const leaderboard = require("./leaderboard");
 
 async function execute(message, args, user) {
   let game_category = "allShots";
@@ -38,6 +37,10 @@ async function execute(message, args, user) {
       mobile: false,
     };
     await leaderboard.set(message.author.id, profile);
+    await leaderboard.set(
+      "playerList",
+      (await leaderboard.get("playerList")).concat([message.author.id])
+    );
   }
 
   try {
