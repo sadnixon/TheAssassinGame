@@ -22,7 +22,7 @@ async function execute(message, args, user) {
 }
 
 module.exports = {
-  name: "clearteams",
+  name: "cleargames",
   aliases: [],
   execute,
 };
