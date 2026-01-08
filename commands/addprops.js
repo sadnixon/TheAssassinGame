@@ -14,6 +14,8 @@ async function execute(message, args, user) {
 
       await leaderboard.set(key, profile);
     }
+
+    message.channel.send("Properties added to profiles.");
   }
 }
 
