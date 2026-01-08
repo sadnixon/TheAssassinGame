@@ -44,6 +44,10 @@ async function execute(message, args, user) {
         value: "All mission-win games that Spies won",
       },
       {
+        name: `[YEAR]`,
+        value: "All mission-win games in a given year between 2019 and 2024",
+      },
+      {
         name: `missionFail`,
         value: "All games that spies won without having to assassinate",
       }
@@ -56,7 +60,7 @@ async function execute(message, args, user) {
 
 module.exports = {
   name: "categories",
-  aliases: ["c", "cat"],
+  aliases: ["cat"],
   description: "categories",
   execute,
 };

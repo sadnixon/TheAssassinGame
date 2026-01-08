@@ -21,8 +21,8 @@ async function execute(message, args, user) {
         resWon: { merlins: 0, percivals: 0, resistance: 0 },
         spyWon: { merlins: 0, percivals: 0, resistance: 0 },
         current_game: "",
-        mobile: true,
-        compact: false,
+        mobile: false,
+        compact: true,
         less_info: false,
       };
 
@@ -31,13 +31,13 @@ async function execute(message, args, user) {
         (await leaderboard.get("playerList")).concat([message.author.id])
       );
     } else {
-      profile.mobile = !profile.mobile;
+      profile.compact = !profile.compact;
     }
     await leaderboard.set(message.author.id, profile);
 
     message.channel.send(
-      `Mobile Viewing Mode has been toggled ${
-        profile.mobile ? "**ON**" : "**OFF**"
+      `Compact Viewing Mode has been toggled ${
+        profile.compact ? "**ON**" : "**OFF**"
       } for <@${message.author.id}>!`
     );
   } catch (err) {
@@ -52,7 +52,7 @@ async function execute(message, args, user) {
 }
 
 module.exports = {
-  name: "mobile",
-  aliases: ["m"],
+  name: "compact",
+  aliases: ["c"],
   execute,
 };

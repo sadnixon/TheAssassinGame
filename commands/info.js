@@ -22,11 +22,19 @@ async function execute(message, args, user) {
       value: "View a player stats profile",
     },
     {
+      name: `${PREFIX}less`,
+      value: "Toggle Less Info Mode",
+    },
+    {
       name: `${PREFIX}mobile | m`,
       value: "Toggle Mobile Viewing Mode",
     },
     {
-      name: `${PREFIX}categories | c`,
+      name: `${PREFIX}compact | c`,
+      value: "Toggle Compact Viewing Mode",
+    },
+    {
+      name: `${PREFIX}categories | cat`,
       value: "View the categories of games that can be referenced",
     },
     {

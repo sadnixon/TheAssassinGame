@@ -8,6 +8,7 @@ const {
   lMap,
   lbUpdater,
   argsParser,
+  gameFormatterCompact,
 } = require("../message-helpers");
 
 async function execute(message, args, user) {
@@ -35,6 +36,8 @@ async function execute(message, args, user) {
       spyWon: { merlins: 0, percivals: 0, resistance: 0 },
       current_game: "",
       mobile: false,
+      compact: false,
+      less_info: false,
     };
     await leaderboard.set(message.author.id, profile);
     await leaderboard.set(
@@ -61,9 +64,11 @@ async function execute(message, args, user) {
 
     const spec_game = await game_database.get(game_id);
     if (profile.mobile) {
-      gameFormatterMobile(spec_game,message);
+      gameFormatterMobile(spec_game, message, profile.less_info);
+    } else if (profile.compact) {
+      gameFormatterCompact(spec_game, message, profile.less_info)
     } else {
-      gameFormatter(spec_game, message);
+      gameFormatter(spec_game, message, profile.less_info);
     }
     const game_roles = spec_game.playerRoles;
 

@@ -104,6 +104,25 @@ client.on("message", async (message) => {
     await game_lists.set("spyWon", []);
   }
 
+  if (!(await game_lists.get("2019"))) {
+    await game_lists.set("2019", []);
+  }
+  if (!(await game_lists.get("2020"))) {
+    await game_lists.set("2020", []);
+  }
+  if (!(await game_lists.get("2021"))) {
+    await game_lists.set("2021", []);
+  }
+  if (!(await game_lists.get("2022"))) {
+    await game_lists.set("2022", []);
+  }
+  if (!(await game_lists.get("2023"))) {
+    await game_lists.set("2023", []);
+  }
+  if (!(await game_lists.get("2024"))) {
+    await game_lists.set("2024", []);
+  }
+
   if (!(await all_guesses.get("allGuesses"))) {
     await all_guesses.set("allGuesses", []);
   }

@@ -12,6 +12,9 @@ async function execute(message, args, user) {
   try {
     let game_category = "allShots";
     game_category = argsParser(args);
+    if (["2019","2020","2021","2022","2023","2024"].includes(game_category)) {
+      game_category = "allShots";
+    }
 
     let lb_category = "Merlins";
     let lb_length = 10;

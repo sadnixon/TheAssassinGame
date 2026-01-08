@@ -129,6 +129,11 @@ function gameTyper(game) {
     } else {
       typeList.push("resWon");
     }
+
+    let gameYear = game.timeGameStarted.slice(0, 4);
+    if (gameYear !== "2025") {
+      typeList.push(gameYear);
+    }
   } else {
     typeList.push("missionFail");
   }
@@ -136,7 +141,7 @@ function gameTyper(game) {
   return typeList;
 }
 
-function gameFormatter(spec_game, message) {
+function gameFormatter(spec_game, message, less_info = false) {
   const succs = spec_game.missionHistory.map((e, index) =>
     e ? `Succ` : `Fail`
   );
@@ -191,15 +196,73 @@ function gameFormatter(spec_game, message) {
   message.channel.send(
     `${emojiDictionary.pF}${vote_row("b")}\n\n**Morgana:** ${
       emojiDictionary[`p${lMap[morgana]}`]
-    }\n**Assassin:** ${
-      emojiDictionary[`p${lMap[assassin]}`]
-    }\n**Shot Length:** ${assLen[0]} minutes ${assLen[1]} seconds\n${
-      spec_game.spyWin ? "**Spies**" : "**Resistance**"
-    } Won!\n**Played at:** <t:${unixStamp}:f>`
+    }\n**Assassin:** ${emojiDictionary[`p${lMap[assassin]}`]}${
+      less_info
+        ? ""
+        : `\n**Shot Length:** ${assLen[0]} minutes ${assLen[1]} seconds\n${
+            spec_game.spyWin ? "**Spies**" : "**Resistance**"
+          } Won!`
+    }\n**Played at:** <t:${unixStamp}:f>`
   );
 }
 
-function gameFormatterMobile(spec_game, message) {
+function gameFormatterCompact(spec_game, message, less_info = false) {
+  const succs = spec_game.missionHistory.map((e, index) =>
+    e ? `Succ` : `Fail`
+  );
+
+  const header_row = spec_game.voteHistory.a
+    .map((e, index) =>
+      [emojiDictionary[`m${index + 1}` + succs[index]]].concat(
+        Array(e.length - 1).fill(emojiDictionary[succs[index]])
+      )
+    )
+    .flat()
+    .join("");
+
+  const vote_row = (player) =>
+    spec_game.voteHistory[player]
+      .flat()
+      .map((e) => emojiDictionary[e])
+      .join("");
+
+  let assassin = "";
+  let morgana = "";
+
+  for (p in spec_game.playerRoles) {
+    if (spec_game.playerRoles[p].role === "Assassin") {
+      assassin = p;
+    } else if (spec_game.playerRoles[p].role === "Morgana") {
+      morgana = p;
+    }
+  }
+
+  const assLen = minsSecs(spec_game.assassinationLength);
+
+  const unixStamp = Math.floor(
+    new Date(spec_game.timeGameStarted).getTime() / 1000
+  );
+
+  message.channel.send(`${emojiDictionary.Corner}${header_row}.`);
+
+  for (p of ["a", "f", "e", "d", "c"]) {
+    message.channel.send(`${emojiDictionary[`p${lMap[p]}`]}${vote_row(p)}.`);
+  }
+
+  message.channel.send(
+    `${emojiDictionary.pF}${vote_row("b")}\n\n**Morgana:** ${
+      emojiDictionary[`p${lMap[morgana]}`]
+    }\n**Assassin:** ${emojiDictionary[`p${lMap[assassin]}`]}${
+      less_info
+        ? ""
+        : `\n**Shot Length:** ${assLen[0]} minutes ${assLen[1]} seconds\n${
+            spec_game.spyWin ? "**Spies**" : "**Resistance**"
+          } Won!`
+    }\n**Played at:** <t:${unixStamp}:f>`
+  );
+}
+
+function gameFormatterMobile(spec_game, message, less_info = false) {
   const succs = spec_game.missionHistory.map((e, index) =>
     e ? `Succ` : `Fail`
   );
@@ -251,11 +314,15 @@ function gameFormatterMobile(spec_game, message) {
         vote_bloc(i) +
           `\n\n**Morgana:** ${
             emojiDictionary[`p${lMap[morgana]}`]
-          }\n**Assassin:** ${
-            emojiDictionary[`p${lMap[assassin]}`]
-          }\n**Shot Length:** ${assLen[0]} minutes ${assLen[1]} seconds\n${
-            spec_game.spyWin ? "**Spies**" : "**Resistance**"
-          } Won!\n**Played at:** <t:${unixStamp}:f>`
+          }\n**Assassin:** ${emojiDictionary[`p${lMap[assassin]}`]}${
+            less_info
+              ? ""
+              : `\n**Shot Length:** ${assLen[0]} minutes ${
+                  assLen[1]
+                } seconds\n${
+                  spec_game.spyWin ? "**Spies**" : "**Resistance**"
+                } Won!`
+          }\n**Played at:** <t:${unixStamp}:f>`
       );
     } else {
       message.channel.send(vote_bloc(i));
@@ -303,15 +370,21 @@ async function lbUpdater(spec_game, id, shot) {
       }
     }
     for (cat of cats) {
-      profile[cat].merlins += 1;
+      if (!["2019", "2020", "2021", "2022", "2023", "2024"].includes(cat)) {
+        profile[cat].merlins += 1;
+      }
     }
   } else if (shot_role == "Percival") {
     for (cat of cats) {
-      profile[cat].percivals += 1;
+      if (!["2019", "2020", "2021", "2022", "2023", "2024"].includes(cat)) {
+        profile[cat].percivals += 1;
+      }
     }
   } else {
     for (cat of cats) {
-      profile[cat].resistance += 1;
+      if (!["2019", "2020", "2021", "2022", "2023", "2024"].includes(cat)) {
+        profile[cat].resistance += 1;
+      }
     }
   }
 
@@ -377,6 +450,18 @@ function argsParser(args) {
       )
     ) {
       return "noType";
+    } else if (args.some((e) => e.toLowerCase().includes("19"))) {
+      return "2019";
+    } else if (args.some((e) => e.toLowerCase().includes("21"))) {
+      return "2021";
+    } else if (args.some((e) => e.toLowerCase().includes("22"))) {
+      return "2022";
+    } else if (args.some((e) => e.toLowerCase().includes("23"))) {
+      return "2023";
+    } else if (args.some((e) => e.toLowerCase().includes("24"))) {
+      return "2024";
+    } else if (args.some((e) => e.toLowerCase().includes("20"))) {
+      return "2020";
     } else {
       return "allShots";
     }
@@ -407,6 +492,7 @@ module.exports = {
   roundToTwo,
   gameTyper,
   gameFormatter,
+  gameFormatterCompact,
   gameFormatterMobile,
   getRandomItem,
   emojiDictionary,
